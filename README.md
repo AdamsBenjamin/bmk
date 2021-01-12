@@ -5,10 +5,12 @@ Comes with a dmenu front-end (bmkmenu).
 
 ## Layout
 
+```
 bmk/bookmarks
 |-- b1
 |-- b2
 ...
+```
 
 ## Functionality
 
@@ -33,6 +35,6 @@ bmk/bookmarks
 any POSIX-compliant shell
 
 ### bmkmenu
-[dmenu](\https://tools.suckless.org/dmenu) (Plus a few scripts)
-xclip
-libnotify
+* [dmenu](\https://tools.suckless.org/dmenu) (Plus a few scripts)
+* xclip
+* libnotify
