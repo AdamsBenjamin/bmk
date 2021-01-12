@@ -1,0 +1,64 @@
+#!/usr/bin/env sh
+
+# notification settings
+urgency=low
+category=confirmation
+expire_time=1500
+
+action=$1
+bmark=$2
+value=$3
+
+
+add() {
+	[ -z "$bmark" ] && bmark=`prompt "What should the bmark be named?"`
+	[ -n "$bmark" ] || exit 1
+
+	[ -z "$value" ] && value=`prompt "What should the bmark point to?"`
+	[ -n "$value" ] || exit 1
+
+	bmk add "$bmark" "$value" && \
+		notify-send \
+			--urgency=$urgency \
+			--expire-time=$expire_time \
+			--category=$category \
+			"${bmark} successfully added."
+}
+
+del() {
+	[ -z "$bmark" ] && \
+		suggestions=`bmk list` && \
+		bmark=`prompt "Which bmark should be deleted?" "${suggestions}"`
+	[ -n "$bmark" ] || exit 1
+
+	confirm "Would you like to delete this bookmark (${bmark})?" && \
+		bmk del "$bmark" "$value" && \
+		notify-send \
+			--urgency=$urgency \
+			--expire-time=$expire_time \
+			--category=$category \
+			"${bmark} successfully deleted."
+}
+
+sel() {
+	[ -z "$bmark" ] && \
+		suggestions=`bmk list` && \
+		bmark=`prompt "Select which bmark?" "${suggestions}"`
+	[ -n "$bmark" ] || exit 1
+
+	(bmk sel "$bmark" | xclip ) && \
+		notify-send \
+			--urgency=$urgency \
+			--expire-time=$expire_time \
+			--category=$category \
+			"${bmark} added to clipboard." \
+			"`xclip -selection primary -o`"
+}
+
+case "$action" in
+  add) add ;;
+  del) del ;;
+  sel) sel ;;
+  list) bmk list ;;
+  *) ;;
+esac

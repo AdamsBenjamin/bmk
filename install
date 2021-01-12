@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+
+bmark_dir=${XDG_CONFIG_HOME:-${HOME}/.config}/bmk
+install_loc=${HOME}/.local/bin
+
+[ -d $bmark_dir ] || mkdir --parents $bmark_dir
+
+cp ./bmk ./bmkmenu "$install_loc"
+chmod +x ${install_loc}/bmk
+chmod +x ${install_loc}/bmkmenu

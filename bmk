@@ -1,0 +1,58 @@
+#!/usr/bin/env sh
+
+
+config_dir=${XDG_CONFIG_HOME:-"$HOME/.config"}/bmk
+bmark_dir=${config_dir}/bookmarks
+
+action=$1
+bmark=$2
+value=$3
+
+
+list() { ls $bmark_dir ;}
+
+add() {
+	[ -z "$bmark" ] && \
+		echo 'What will be the name of the bookmark?' && \
+		read bmark
+	[ -n "$bmark" ] || exit 1
+
+	[ -z "$value" ] && \
+		echo 'What will the bookmark point to?' && \
+		read value
+	[ -n "$value" ] || exit 1
+
+	new="${bmark_dir}/${bmark}"
+	echo $value > $new
+}
+
+del() {
+	[ -z "$bmark" ] && \
+		echo 'Which bookmark should be deleted?' && \
+		read bmark && \
+		echo "Are you sure you want to delete bookmark (${bmark})?" && \
+		read ans && \
+		[ 'Y' = "$ans" -o 'y' = "$ans" ]
+	[ -n "$bmark" ] || exit 1
+
+	chosen="${bmark_dir}/${bmark}"
+	[ -f $chosen ] && rm -f $chosen
+}
+
+sel() {
+	[ -z "$bmark" ] && \
+		echo 'Which bookmark would you like to select?' && \
+		read bmark
+	[ -n "$bmark" ] || exit 1
+
+	chosen="${bmark_dir}/${bmark}"
+	[ -f "$chosen" ] && cat $chosen
+}
+
+case "$action" in
+  list) list ;;
+  add) add ;;
+  del) del ;;
+  sel) sel ;;
+  *) ;;
+esac
